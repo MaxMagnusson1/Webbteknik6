@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vite + Vue</title>
+  <script type="module" src="src/main.js"></script>
+</head>
+<body>
+  <!-- Placeholder för Google-inloggning -->
+  <div id="g_id_onload"
+       data-client_id="583664265341-6d7d60u8m308oeg4ae94m9t7jugl1hq5.apps.googleusercontent.com"
+       data-context="signin"
+       data-ux_mode="popup"
+       data-callback="onGoogleAuth"
+       data-auto_prompt="false">
+  </div>
+
+  <div class="g_id_signin"
+       data-type="standard"
+       data-shape="rectangular"
+       data-theme="outline"
+       data-text="signin_with"
+       data-size="large"
+       data-logo_alignment="left">
+  </div>
+
+  <!-- Placeholder för Vue-appen -->
+  <div id="app"></div>
+  <script src="https://accounts.google.com/gsi/client" async></script>
+
+  <script>
+    async function onGoogleAuth(data) {
+    //  console.log('Google-inloggning lyckades!');
+      
+      // Ladda in Vue-applikationen efter inloggningen
+  const vueAppContainer = document.getElementById('app');
+    //  vueAppContainer.innerHTML = '';
+
+    //const script = document.createElement('script');
+    // script.src = 'src/main.js'; // Ange sökvägen till ditt Vue-apps huvudskript
+   //  vueAppContainer.appendChild(script);
+      // Förbered och skicka eventuell data till servern
+      const res = await fetch('/login', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ credential: data.credential })
+      });
+
+      // Hantera svar från servern
+      const user = await res.json();
+      //console.log(user);
+   //   console.log('User:', user.name);
+console.log(user.name); 
+      const p = document.createElement('p');
+       p.textContent = user.name;
+       document.body.append(p); 
+     // console.log('User:', user.name);
+      window.user = user.name; 
+    }
+  </script>
+
+  <!-- Skript för Google-inloggning -->
+</body>
+</html>
